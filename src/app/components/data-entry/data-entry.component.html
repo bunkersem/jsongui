@@ -1,0 +1,7 @@
+<ng-container *ngIf="error; else elseTemplate">
+    <p style="color: red">Unable to parse JSON Schema. JSON is malformed.</p>
+</ng-container>
+<ng-template #elseTemplate>
+    <p *ngIf="jsd.jsonParseError" style="color: red">Unable to parse JSON Content. JSON is malformed.</p>
+    <app-data-entry-entity [desc]="schema"></app-data-entry-entity>
+</ng-template>

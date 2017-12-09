@@ -1,0 +1,56 @@
+<div [ngSwitch]="desc.type" class="data-entry-entity">
+    <div *ngSwitchCase="'object'">
+        <h2>{{ desc.title || 'Object' }}: Object</h2>
+        <div *ngFor="let prop of propsArr">
+            <app-data-entry-entity [desc]="prop" [prefix]="getPrefix(prop.title)"></app-data-entry-entity>
+        </div>
+
+    </div>
+    <div *ngSwitchCase="'string'">
+        <div>
+            <label>{{ desc.title || 'Prop'}}: String</label>
+        </div>
+        <mat-form-field>
+            <input type="text" #input matInput placeholder="label" [(ngModel)]="value" (ngModelChange)="onValueChanged(input.value)">
+        </mat-form-field>
+
+    </div>
+    <div *ngSwitchCase="'integer'">
+        <div>
+            <label>{{ desc.title || 'Prop'}}: Integer</label>
+        </div>
+        <mat-form-field>
+            <input type="number" #input matInput step="1" [min]="desc.minimum" [max]="desc.maximum" placeholder="label" [(ngModel)]="value"
+                (ngModelChange)="onValueChanged(input.value)">
+        </mat-form-field>
+    </div>
+    <div *ngSwitchCase="'number'">
+        <div>
+            <label>{{ desc.title || 'Prop'}}: Number</label>
+        </div>
+        <mat-form-field>
+            <input type="number" #input matInput step="0.01" [min]="desc.minimum" [max]="desc.maximum" placeholder="label" [(ngModel)]="value"
+                (ngModelChange)="onValueChanged(input.value)">
+        </mat-form-field>
+    </div>
+    <div *ngSwitchCase="'array'">
+        <div>
+            <label>{{ desc.title || 'Prop'}}: Array</label>
+        </div>
+        <p style="color: red">Typeof Array is not yet supported.</p>
+    </div>
+    <div *ngSwitchCase="'boolean'">
+        <div>
+            <div><label>{{ desc.title || 'Prop'}}: Boolean</label></div>
+            <mat-form-field>
+                <mat-select [(ngModel)]="value" (ngModelChange)="onValueChanged(value)">
+                    <mat-option [value]="true">True</mat-option>
+                    <mat-option [value]="false">False</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+    <div *ngSwitchDefault>
+        <p color="red">{{ desc.type }} is an unknown type.</p>
+    </div>
+</div>

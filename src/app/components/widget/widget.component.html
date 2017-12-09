@@ -1,0 +1,88 @@
+<main>
+
+    <div class="widget-wrapper">
+        <div class="container widget">
+            <div class="col-container">
+                <mat-card class="col-5">
+                    <mat-card-content>
+                        <div>
+                            <h2>Configure</h2>
+                        </div>
+                        <div>
+                            <label>JSON Schema</label>
+                        </div>
+
+                        <mat-form-field>
+                            <mat-select placeholder="Choose Type" [(ngModel)]="jsd.options.jsonSchemaOptionChoice" name="jsonSchemaOptionChoice">
+                                <mat-option *ngFor="let item of jsd.options.jsonSchemaOptions" [value]="item.value">
+                                    {{item.viewValue}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <p>
+                            <label>JSON File</label>
+                        </p>
+                        <mat-form-field>
+                            <mat-select placeholder="Choose Type" [(ngModel)]="jsd.options.jsonOptionChoice" name="jsonOptionChoice">
+                                <mat-option *ngFor="let item of jsd.options.jsonOptions" [value]="item.value">
+                                    {{item.viewValue}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <button mat-raised-button color="warn" (click)="schemaFromJsonContent()">Schema From JSON</button>
+                    </mat-card-content>
+                </mat-card>
+                <mat-card class="col-7">
+                    <div class="json-text-container">
+                        <div>
+                            <h2>Content Edit</h2>
+                        </div>
+                        <span [ngSwitch]="jsd.options.jsonSchemaOptionChoice">
+                            <div *ngSwitchCase="'file-0'" class="pb-2">
+                                <button color="primary" mat-raised-button (click)="schemaUpload.click()">Upload Schema File</button>
+                                <input hidden type="file" #schemaUpload (change)="onSchemaUpload($event)"/>
+                            </div>
+                            <div *ngSwitchDefault>
+                                <mat-form-field>
+                                    <textarea matInput rows="10" (ngModelChange)="onSchemaChange($event)" placeholder="JSON Schema" [(ngModel)]="jsd.content.JSONSchema"
+                                        (keydown.Tab)="onTextAreaTabKeypress($event)"></textarea>
+                                </mat-form-field>
+                            </div>
+                        </span>
+                        <span [ngSwitch]="jsd.options.jsonOptionChoice">
+                            <div *ngSwitchCase="'file-0'" class="pb-2">
+                                <button color="primary" mat-raised-button (click)="jsonContentUpload.click()">Upload JSON File</button>
+                                <input hidden type="file" #jsonContentUpload (change)="onJSONContentUpload($event)"/>
+                            </div>
+                            <div *ngSwitchDefault>
+                                <mat-form-field>
+                                    <textarea matInput rows="10" (ngModelChange)="onContentChange($event)" placeholder="JSON Content" [(ngModel)]="jsd.content.JSONContent"
+                                        (keydown.Tab)="onTextAreaTabKeypress($event)"></textarea>
+                                </mat-form-field>
+                            </div>
+                        </span>
+
+                        <p *ngIf="jsd.jsonParseError" style="color: red">JSON Content Parser Error. Malformed JSON.</p>
+                    </div>
+
+                </mat-card>
+            </div>
+            <div class="mt-5 mb-5"></div>
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title><h2>Editor</h2></mat-card-title>
+                    <mat-card-subtitle>Edit Entries</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="divider"></div>
+                    <div class="entry-elements">
+                        <app-data-entry></app-data-entry>
+                    </div>
+                </mat-card-content>
+                <mat-card-actions>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+    </div>
+</main>

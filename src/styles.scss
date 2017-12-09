@@ -1,0 +1,59 @@
+@import './fonts.scss';
+@import '../node_modules/material-design-icons/iconfont/material-icons.css';
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+
+html, body {
+  margin: 0;
+  padding: 0;
+
+  height: 100%;
+  font-family: Roboto, sans-serif, Arial, Helvetica;
+  background: url(./assets/background.jpg) no-repeat center fixed;
+  -webkit-background-size: cover; /* pour anciens Chrome et Safari */
+  background-size: cover; /* version standardisée */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+
+$grid-columns: 12;
+
+
+.col {
+  display: flex;
+  
+}
+
+@mixin grid-base($i) {
+  width: 8.3333% * $i;
+  width: calc(#{8.3333% * $i} - #{5px * $i});
+}
+
+@for $i from 1 through $grid-columns {
+  .col-#{$i} { 
+    @include grid-base($i); 
+    @extend .col
+   }
+}
+
+
+
+.divider {
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+@for $i from 0 through 5 {
+  $j: $i * 10;
+  .mt-#{$i} { margin-top: #{$j}px }
+  .ml-#{$i} { margin-left: #{$j}px }
+  .mr-#{$i} { margin-right: #{$j}px }
+  .mb-#{$i} { margin-bottom: #{$j}px }
+  .pt-#{$i} { padding-top: #{$j}px }
+  .pl-#{$i} { padding-left: #{$j}px }
+  .pr-#{$i} { padding-right: #{$j}px }
+  .pb-#{$i} { padding-bottom: #{$j}px }
+}
