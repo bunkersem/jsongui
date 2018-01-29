@@ -1,7 +1,10 @@
 "use strict";
 exports.__esModule = true;
 var electron_1 = require("electron");
-var electron_main_msging_1 = require("./electron/electron-main-msging");
+// import * as path from 'path';
+// import * as crypto from 'crypto';
+// import Store from './electron/store';
+// import { msger } from './electron/electron-main-msging';
 var win, serve;
 var args = process.argv.slice(1);
 serve = args.some(function (val) { return val === '--serve'; });
@@ -32,36 +35,35 @@ function createWindow() {
         win = null;
     });
 }
-try {
-    // This method will be called when Electron has finished
-    // initialization and is ready to create browser windows.
-    // Some APIs can only be used after this event occurs.
-    electron_1.app.on('ready', createWindow);
-    // Quit when all windows are closed.
-    electron_1.app.on('window-all-closed', function () {
-        // On OS X it is common for applications and their menu bar
-        // to stay active until the user quits explicitly with Cmd + Q
-        if (process.platform !== 'darwin') {
-            electron_1.app.quit();
-        }
-    });
-    electron_1.app.on('activate', function () {
-        // On OS X it's common to re-create a window in the app when the
-        // dock icon is clicked and there are no other windows open.
-        if (win === null) {
-            createWindow();
-        }
-    });
-}
-catch (e) {
-    // Catch Error
-    // throw e;
-}
-console.log('everyting ready');
-electron_main_msging_1.msger.addReciever('default', function (msgArgs, cb) {
-    console.log('main: got msg from renderer', msgArgs);
-    // emulate task
-    setTimeout(function () {
-        cb({ pi: Math.PI });
-    }, 100);
-});
+// try {
+//     // This method will be called when Electron has finished
+//     // initialization and is ready to create browser windows.
+//     // Some APIs can only be used after this event occurs.
+//     app.on('ready', createWindow);
+//     // Quit when all windows are closed.
+//     app.on('window-all-closed', () => {
+//         // On OS X it is common for applications and their menu bar
+//         // to stay active until the user quits explicitly with Cmd + Q
+//         if (process.platform !== 'darwin') {
+//             app.quit();
+//         }
+//     });
+//     app.on('activate', () => {
+//         // On OS X it's common to re-create a window in the app when the
+//         // dock icon is clicked and there are no other windows open.
+//         if (win === null) {
+//             createWindow();
+//         }
+//     });
+// } catch (e) {
+//     // Catch Error
+//     // throw e;
+// }
+// console.log('everyting ready');
+// msger.addReciever('default', (msgArgs, cb) => {
+//     console.log('main: got msg from renderer', msgArgs);
+//     // emulate task
+//     setTimeout(() => {
+//         cb({ pi: Math.PI });
+//     }, 100);
+// });
