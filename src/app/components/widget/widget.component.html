@@ -31,6 +31,13 @@
                             </mat-select>
                         </mat-form-field>
                         <button mat-raised-button color="warn" (click)="schemaFromJsonContent()">Schema From JSON</button>
+                        <br>
+                        <br>
+                        <h3>Examples</h3>
+                        <p><button mat-raised-button color="accent" (click)="schemaFromUrl('http://json-schema.org/example/geo.json')">GEO Example</button></p>
+                        <p><button mat-raised-button color="accent" (click)="schemaFromUrl('http://json-schema.org/example/card.json')">Card Example</button></p>
+                        <p><button mat-raised-button color="accent" (click)="schemaFromUrl('http://json-schema.org/example/calendar.json')">Calender Example</button></p>
+                        <p><button mat-raised-button color="accent" (click)="schemaFromUrl('http://json-schema.org/example/address.json')">Address Example</button></p>
                     </mat-card-content>
                 </mat-card>
                 <mat-card class="col-7">

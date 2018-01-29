@@ -1,6 +1,12 @@
+<div *ngIf="desc && desc.type && desc.type !== 'object' && desc.type !== 'array'">
+    <button class="entity-mutator" (click)="clearVal();"  color="accent" mat-mini-fab>Clear</button>
+</div>
+<div *ngIf="desc && desc.type && desc.type === 'array'">
+    <button class="entity-mutator" (click)="addArrElement();"  color="accent" mat-mini-fab>Add</button>
+</div>
 <div [ngSwitch]="desc.type" class="data-entry-entity">
     <div *ngSwitchCase="'object'">
-        <h2>{{ desc.title || 'Object' }}: Object</h2>
+        <h2>{{ desc.title || 'Unknown' }}: Object</h2>
         <div *ngFor="let prop of propsArr">
             <app-data-entry-entity [desc]="prop" [prefix]="getPrefix(prop.title)"></app-data-entry-entity>
         </div>
@@ -37,7 +43,9 @@
         <div>
             <label>{{ desc.title || 'Prop'}}: Array</label>
         </div>
-        <p style="color: red">Typeof Array is not yet supported.</p>
+        <div *ngFor="let obj of value; index as i" [attr.data-index]="i">
+            <app-data-entry-entity [desc]="desc.items" [prefix]="getPrefix(i)"></app-data-entry-entity>
+        </div>
     </div>
     <div *ngSwitchCase="'boolean'">
         <div>

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { JSONDataService } from 'app/providers/jsondata.service';
 import { UserConfigService } from 'app/providers/userconfig/userconfig.service';
+import { HttpClient } from '@angular/common/http';
+
 import * as generateSchema from 'generate-schema';
 
 @Component({
@@ -12,7 +14,7 @@ export class WidgetComponent implements OnInit {
     title = `App works !`;
     indentChar: string;
 
-    constructor(public jsd: JSONDataService, public ucr: UserConfigService) {
+    constructor(public jsd: JSONDataService, public ucr: UserConfigService, private http: HttpClient) {
         const indentation = ucr.repository.userConfigBehaviourSubject.value.text.indentation;
         this.indentChar = { 'tabs': '\t', 'spaces': ' '.repeat(indentation.amount) }[indentation.type];
     }
@@ -93,5 +95,15 @@ export class WidgetComponent implements OnInit {
         this.jsd.content.JSONSchema = this.jsd.stringifyJSONFromRules(s);
         this.jsd.content.JSONSchemaChangeEventEmitter.next(this.jsd.content.JSONSchema);
         console.log('generated schema', s);
+    }
+
+    schemaFromUrl(url) {
+        this.http.get(url).subscribe(data => {
+            this.jsd.content.JSONSchema = JSON.stringify(data, null, this.indentChar);
+            this.jsd.content.JSONSchemaChangeEventEmitter.next(this.jsd.content.JSONSchema);
+            console.log('fetched schema');
+        }, err => {
+            alert('Sorry, unable to connect to the internet');
+        })
     }
 }

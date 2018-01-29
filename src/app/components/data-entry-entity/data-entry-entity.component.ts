@@ -2,6 +2,7 @@ import { Component, OnInit, Input, OnChanges, OnDestroy } from '@angular/core';
 import { JSONSchemaElement } from 'app/components/data-entry-entity/jsonschema';
 import * as Rx from 'rxjs/Rx';
 import { JSONDataService } from 'app/providers/jsondata.service';
+import { getQueryValue } from '@angular/core/src/view/query';
 
 
 @Component({
@@ -12,7 +13,7 @@ import { JSONDataService } from 'app/providers/jsondata.service';
 export class DataEntryEntityComponent implements OnInit, OnChanges, OnDestroy {
 
     @Input() desc: JSONSchemaElement;
-    @Input() prefix: string[];
+    @Input() prefix: (string | number)[];
     value: any;
     propsArr: JSONSchemaElement[];
     valueChangedEventEmitter = new Rx.Subject<string>();
@@ -31,6 +32,12 @@ export class DataEntryEntityComponent implements OnInit, OnChanges, OnDestroy {
 
     ngOnInit() {
         this.refresh();
+        console.log({
+            'desc': this.desc,
+            'value': this.value,
+            prefix: this.prefix,
+            propsArr: this.propsArr
+        })
     }
 
 
@@ -65,11 +72,28 @@ export class DataEntryEntityComponent implements OnInit, OnChanges, OnDestroy {
             }
         }
         obj[this.prefix[this.prefix.length - 1]] = value;
+        this.refreshJsonContent();
+    }
+
+    refreshJsonContent() {
         this.jsd.content.JSONContent = JSON.stringify(this.jsd.json, null, 2);
     }
 
     getValueFromJsonContent() {
-        if (this.jsd.jsonParseError || ! this.prefix) {
+        const obj = this.getParentFromJsonContent();
+        return obj && obj[this.prefix[this.prefix.length - 1]];
+    }
+
+    addArrElement() {
+        this.value = this.value || [];
+        console.log('adding', this.desc);
+        this.valueChangedObserver(this.value)
+        this.value.push(this.defaultVal((<any>this.desc.items).type));
+        this.refreshJsonContent();
+    }
+
+    getParentFromJsonContent() {
+        if (this.jsd.jsonParseError || !this.prefix) {
             return;
         }
         let obj = this.jsd.json;
@@ -81,7 +105,7 @@ export class DataEntryEntityComponent implements OnInit, OnChanges, OnDestroy {
                 obj = obj[this.prefix[i]];
             }
         }
-        return obj[this.prefix[this.prefix.length - 1]];
+        return obj;
     }
 
     onValueChanged() {
@@ -92,6 +116,29 @@ export class DataEntryEntityComponent implements OnInit, OnChanges, OnDestroy {
         return (this.prefix || []).concat([title]);
     }
 
+    clearVal() {
+        const obj = this.getParentFromJsonContent();
+        console.log('clear value', (obj || {})[this.prefix[this.prefix.length - 1]])
+        if (Array.isArray(obj)) {
+            (<any>obj).splice(<number>this.prefix[this.prefix.length - 1], 1)
+        } else {
+            delete (obj || {})[this.prefix[this.prefix.length - 1]];
+        }
+        this.refreshJsonContent();
+    }
+
+    defaultVal(type) {
+        switch (type) {
+            case 'boolean': return false;
+            case 'function': return function () { };
+            case 'null': return null;
+            case 'number': return 0;
+            case 'object': return {};
+            case 'string': return '';
+            case 'symbol': return Symbol();
+            case 'undefined': return void 0;
+        }
+    }
 }
 
 

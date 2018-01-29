@@ -3,4 +3,5 @@ export interface JSONSchemaElement {
     type: string,
     properties?: {}
     required?: string[];
+    items: any[]
 }
